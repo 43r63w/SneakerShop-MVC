@@ -1,0 +1,119 @@
+﻿@model IEnumerable<Product>
+
+@{
+    var category = Context.Request.Query["category"];
+    var madeInUkUsa = "text-primary";
+    var forRun = "text-primary";
+    var forAsphalt = "text-primary";
+    var sportStyle = "text-primary";
+    var all = "text-primary";
+
+    switch (category)
+    {
+        case "madeInUkUsa":
+            madeInUkUsa = "active text-white bg-primary";
+            break;
+        case "forRun":
+            forRun = "active text-white bg-primary";
+            break;
+        case "forAsphalt":
+            forAsphalt = "active text-white bg-primary";
+            break;
+        case "sportStyle":
+            sportStyle = "active text-white bg-primary";
+            break;
+        default:
+            all = "active text-white bg-primary";
+            break;
+
+    }
+}
+
+
+<div class="d-flex justify-content-between pb-1 pt-0">
+    <span></span>
+    <ul class="list-group list-group-horizontal-sm">
+        <a style="text-decoration:none;" asp-controller="Home" asp-action="Index" asp-route-category="madeInUkUsa">
+        <li class="list-group-item @madeInUkUsa ">Made in UK/USA</li>
+        </a>
+        <a style="text-decoration:none;" asp-controller="Home" asp-action="Index" asp-route-category="forRun">
+        <li class="list-group-item @forRun">Бігові</li>
+        </a>
+        <a style="text-decoration:none;" asp-controller="Home" asp-action="Index" asp-route-category="forAsphalt">
+        <li class="list-group-item @forAsphalt">Для асфальтного покриття</li>
+        </a>
+        <a style="text-decoration:none;" asp-controller="Home" asp-action="Index" asp-route-category="sportStyle">
+        <li class="list-group-item @sportStyle">Спортивний стиль</li>
+        </a>
+        <a style="text-decoration:none;" asp-controller="Home" asp-action="Index" asp-route-category="all">
+        <li class="list-group-item @all ">Усі</li>
+        </a>
+    </ul>
+</div>
+
+
+
+
+<div class="row pb-3">
+
+    @foreach (var product in Model)
+    {
+        <div class="col-lg-3 col-sm-6">
+            <div class="row p-2">
+                <div class="col-12 p-1">
+                    <div class="card border-0 p-3 shadow  border-top border-5 rounded">
+                        @if (product.ProductImages != null && product.ProductImages.Count() > 0)
+                        {
+                            <img src="@product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" />
+                        }
+                        else
+                        {
+                            <img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+                        }
+
+                        <div class="card-body pb-0">
+                            <div class="pl-1">
+                                <p class="card-title text-body-tertiary text-center"><b>@product.Category.Name</b></p>
+                                <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@product.Name @product.Model</p>
+                                @*  <p class="card-title text-dark text-center"> <b></b></p> *@
+                            </div>
+                            @if (product.IsDiscount == true)
+                            {
+
+                                <div class="pl-1">
+                                    <p class="text-dark text-opacity-75 text-center">
+                                        Зі знижкою:
+                                        <span>
+                                            @product.PriceForDiscount.ToString("c")
+                                        </span>
+                                    </p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="pl-1">
+                                    <p class="text-dark text-opacity-75 text-center ">
+                                        Ціна:
+                                        <span class="">
+                                            @product.Price.ToString("c")
+                                        </span>
+                                    </p>
+                                </div>
+
+                            }
+                        </div>
+                        <div>
+                            <a asp-action="Details"
+                               asp-route-productId="@product.Id"
+                               class="btn btn-primary bg-black border-0 form-control">
+                                Детальніше
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
